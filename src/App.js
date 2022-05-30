@@ -5,7 +5,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <ProgressBarContainer />
+        <ProgressBarContainer percenRange={25} />
       </div>
     );
   }
