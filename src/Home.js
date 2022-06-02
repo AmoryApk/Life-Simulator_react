@@ -36,6 +36,8 @@ const api = {
 function Home() {
   const [weather, setWeather] = useState({});
   const [location, setLocation] = useState({});
+  const [time, setTime] = useState(0);
+  const [running, setRunning] = useState(true);
 
   useEffect(() => {
     fetch(
@@ -88,14 +90,6 @@ function Home() {
     return `${day} ${date} ${month} ${year}`;
   };
 
-  const timeBuilder = (d) => {
-    let hours = d.getHours();
-    let minutes = d.getMinutes();
-    let seconds = d.getSeconds();
-    let time = `${hours}:${minutes}:${seconds}`;
-    return time;
-  };
-
   const weatherIcon = () => {
     let { main } = weather.weather[0];
     if (main === "Clear") {
@@ -107,6 +101,30 @@ function Home() {
     } else if (main === "Snow") {
       return <Snow />;
     }
+  };
+
+  useEffect(() => {
+    let interval;
+    if (running) {
+      interval = setInterval(() => {
+        setTime((prevTime) => prevTime + 10000);
+      }, 10);
+    } else if (!running) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [running]);
+
+  const formatTime = () => {
+    const getSeconds = `0${Math.floor((time / 1000) % 60)}`.slice(-2);
+    const minutes = `${Math.floor((time / 60000) % 60)}`;
+    const getMinutes = `0${minutes % 60}`.slice(-2);
+    const getHours = `0${Math.floor((time / (1000 * 60 * 60)) % 24)}`.slice(-2);
+    const getDays = `0${Math.floor((time / (1000 * 60 * 60 * 24)) % 7)}`.slice(
+      -2
+    );
+
+    return `${getDays} : ${getHours} : ${minutes} : ${getSeconds}`;
   };
 
   return (
@@ -123,7 +141,11 @@ function Home() {
         {typeof weather.main != "undefined" ? (
           <div>
             <div className="location-box">
-              <div className="time">{timeBuilder(new Date())}</div>
+              <div className="stopwatch">
+                <div className="numbers">
+                  <p>{formatTime()}</p>
+                </div>
+              </div>
             </div>
             <div className="weather-box">
               <div className="temp">{weather.main.temp}&deg;C</div>

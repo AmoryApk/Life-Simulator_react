@@ -143,22 +143,8 @@ export const ProgressBarContainer = () => {
     }
   }, [progress4]);
 
-  const [date, setDate] = useState(new Date());
-
-  function refreshClock() {
-    setDate(new Date());
-  }
-  useEffect(() => {
-    const timerId = setInterval(refreshClock, 10);
-    return function cleanup() {
-      clearInterval(timerId);
-    };
-  }, []);
-
   return (
     <div className="container">
-      {date.toLocaleTimeString()}
-      
       {percentRange}%
       <ProgressBar percentRange={percentRange} />
       {percentRange2}%
@@ -170,25 +156,23 @@ export const ProgressBarContainer = () => {
       <div className="toggle-buttons">
         <button
           disabled={buttonStatus}
-          onClick={() =>{
+          onClick={() => {
             setProgress(percentRange <= 100 ? percentRange + 20 : 100);
-            if(percentRange <= 0){
+            if (percentRange <= 0) {
               setProgress(20);
             }
-          }
-          }
+          }}
         >
           Makan
         </button>
         <button
           disabled={buttonStatus2}
-          onClick={() =>{
+          onClick={() => {
             setProgress2(percentRange2 <= 100 ? percentRange2 + 20 : 100);
-            if(percentRange2 <= 0){
+            if (percentRange2 <= 0) {
               setProgress2(20);
             }
-          }
-          }
+          }}
         >
           Tidur
         </button>
@@ -197,7 +181,7 @@ export const ProgressBarContainer = () => {
           disabled={buttonStatus3}
           onClick={() => {
             setProgress3(percentRange3 <= 100 ? percentRange3 + 20 : 100);
-            if(percentRange3 <= 0){
+            if (percentRange3 <= 0) {
               setProgress3(20);
             }
           }}
@@ -208,13 +192,15 @@ export const ProgressBarContainer = () => {
           disabled={buttonStatus4}
           onClick={() => {
             setProgress4(percentRange4 <= 100 ? percentRange4 + 20 : 100);
-            if(percentRange4 <= 0){
+            if (percentRange4 <= 0) {
               setProgress4(20);
             }
           }}
         >
           Belajar
         </button>
+      </div>
+      <div class="-buttons2">
         <button
           onClick={() => {
             Kampus();
