@@ -311,8 +311,8 @@ import MobileViewLayout from "react-mobile-layout";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faAngleLeft } from "@fortawesome/free-solid-svg-icons";
-import ProgressBar from "@ramonak/react-progress-bar";
 import { ProgressBarContainer } from "./ProgressBar";
+import "./styles.css";
 
 const api = {
   key: "1ac74a3d55fa77c410c13c10ed1a4649",
@@ -494,92 +494,102 @@ function Home() {
     }
   }, [state.hour]);
 
+  const background = () => {
+    if (state.hour >= 0 && state.hour <= 11) {
+      return "morning";
+    } else if (state.hour >= 12 && state.hour <= 16) {
+      return "afternoon";
+    } else if (state.hour >= 17 && state.hour <= 23) {
+      return "evening";
+    }
+  };
+
   return (
-    <div className="container">
-      <div
-        className={
-          typeof weather.main != "undefined"
-            ? weather.main.temp > 16
-              ? "app snow"
+    <div className={`${background()}`}>
+      <div className="container">
+        <div
+          className={
+            typeof weather.main != "undefined"
+              ? weather.main.temp > 16
+                ? "app snow"
+                : "app"
               : "app"
-            : "app"
-        }
-      >
-        <main>
-          {typeof weather.main != "undefined" ? (
-            <div>
-              <div className="row">
-                <div className="date">{state.day}</div>
-                <div className="time">
-                  {state.hour < 10 ? `0${state.hour}` : state.hour} :{" "}
-                  {state.minute < 10 ? `0${state.minute}` : state.minute}
+          }
+        >
+          <main>
+            {typeof weather.main != "undefined" ? (
+              <div>
+                <div className="row">
+                  <div className="date">{state.day}</div>
+                  <div className="time">
+                    {state.hour < 10 ? `0${state.hour}` : state.hour} :{" "}
+                    {state.minute < 10 ? `0${state.minute}` : state.minute}
+                  </div>
+                </div>
+                <div className="weather-box">
+                  <div className="temp">{weather.main.temp}&deg;C</div>
+                  <div className="weather">{weatherIcon()}</div>
+                  <h1 className="greet">{greet}</h1>
+                </div>
+                <div className="location-box"></div>
+                <div className="App">
+                  <ProgressBarContainer />
                 </div>
               </div>
-              <div className="weather-box">
-                <div className="temp">{weather.main.temp}&deg;C</div>
-                <div className="weather">{weatherIcon()}</div>
-                <h1 className="greet">{greet}</h1>
-              </div>
-              <div className="location-box">
-                <div className="location">Home</div>
-              </div>
-              <div className="App">
-                <ProgressBarContainer />
-              </div>
-            </div>
-          ) : (
-            ""
-          )}
-        </main>
-      </div>
+            ) : (
+              ""
+            )}
+          </main>
+        </div>
 
-      <MobileViewLayout>
-        <ScrollView>
-          <div className="container">
-            <div className="row">
-              <div className="col-12">
-                <div className="card">
-                  <div className="card-body">
-                    <h5 className="card-title">
-                      <Link to="/home">
-                        <FontAwesomeIcon icon={faAngleLeft} />
-                      </Link>
-                      <span>News</span>
-                      <Link to="/home">
-                        <FontAwesomeIcon icon={faAngleRight} />
-                      </Link>
-                    </h5>
-                    <div className="card-text">
-                      <div className="row">
-                        {news.map((item, index) => {
-                          return (
-                            <div className="col-12 col-md-6" key={index}>
-                              <div className="card">
-                                <div className="card-body">
-                                  <h5 className="card-title">{item.title}</h5>
-                                  <p className="card-text">
-                                    {item.description}
-                                  </p>
-                                  <a
-                                    href={item.url}
-                                    className="btn btn-primary"
-                                  >
-                                    Read More
-                                  </a>
+        <MobileViewLayout>
+          <ScrollView>
+            <div className="container">
+              <div className="row">
+                <div className="col-12">
+                  <div className="card">
+                    <div className="card-body">
+                      <h5 className="card-title">
+                        <Link to="/home">
+                          <FontAwesomeIcon icon={faAngleLeft} />
+                        </Link>
+                        <span>News</span>
+                        <Link to="/home">
+                          <FontAwesomeIcon icon={faAngleRight} />
+                        </Link>
+                      </h5>
+                      <div className="card-text">
+                        <div className="row">
+                          {news.map((item, index) => {
+                            return (
+                              <div className="col-12 col-md-6" key={index}>
+                                <div className="card">
+                                  <div className="card-body">
+                                    <h5 className="card-title">{item.title}</h5>
+                                    <p className="card-text">
+                                      {item.description}
+                                    </p>
+                                    <a
+                                      href={item.url}
+                                      className="btn btn-primary"
+                                    >
+                                      Read More
+                                    </a>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </ScrollView>
-      </MobileViewLayout>
+          </ScrollView>
+        </MobileViewLayout>
+      </div>
     </div>
   );
 }

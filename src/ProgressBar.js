@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
+import { Button, Progressbar, Modal, ModalBody } from "react-bootstrap";
 import "./progress-bar.css";
 import {
   MDBCard,
@@ -25,9 +26,12 @@ import {
   TextInput,
   KeyboardAvoidingView,
   TouchableOpacity,
-  Button,
   FlatList
 } from "react-native";
+import eat from "./assets/eat.png";
+import sleep from "./assets/sleep.png";
+import play from "./assets/play.png";
+import study from "./assets/study.png";
 
 let progressInterval = null;
 
@@ -79,6 +83,49 @@ const ProgressBar4 = (c) => {
   );
 };
 
+const initialState = {
+  day: "Sunday",
+  hour: 0,
+  minute: 0
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "tick":
+      return {
+        ...state,
+        minute: state.minute === 59 ? 0 : state.minute + 1
+      };
+    case "day":
+      return {
+        ...state,
+        day:
+          state.day === "Sunday"
+            ? "Monday"
+            : state.day === "Monday"
+            ? "Tuesday"
+            : state.day === "Tuesday"
+            ? "Wednesday"
+            : state.day === "Wednesday"
+            ? "Thursday"
+            : state.day === "Thursday"
+            ? "Friday"
+            : state.day === "Friday"
+            ? "Saturday"
+            : state.day === "Saturday"
+            ? "Sunday"
+            : "Sunday"
+      };
+    case "hour":
+      return {
+        ...state,
+        hour: state.hour === 23 ? 0 : state.hour + 1
+      };
+    default:
+      return state;
+  }
+};
+
 export const ProgressBarContainer = (child) => {
   let [percentRange, setProgress, progress] = useState(70);
   let [percentRange2, setProgress2, progress2] = useState(100);
@@ -89,7 +136,78 @@ export const ProgressBarContainer = (child) => {
   const [buttonStatus3, setButtonStatus3] = React.useState(false);
   const [buttonStatus4, setButtonStatus4] = React.useState(false);
   const [count, setCount] = useState(0);
-  const [location, setLocation] = useState("test");
+  const [location, setLocation] = useState("Home");
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [time, setTime] = useState(new Date());
+  const [show, setShow] = React.useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const [msg, setMsg] = useState("test");
+  const [judul, setJudul] = useState("test");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      dispatch({ type: "tick" });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (state.minute === 59) {
+      dispatch({ type: "hour" });
+      setShow(true);
+      setJudul("telalu fokus kuliah sampai stress");
+      setMsg("Kuliah penting namun hiburan harus terpenuhi ");
+    }
+  }, [state.minute]);
+
+  useEffect(
+    () => {
+      if (state.hour === 23) {
+        dispatch({ type: "day" });
+      }
+      if (state.day === "Saturday") {
+        setShow(true);
+      }
+    },
+    [state.hour],
+    [state.day]
+  );
+
+  useEffect(() => {
+    if (state.day === "Saturday") {
+      if (count >= 1000000) {
+        setJudul("Mending langsung kerja");
+        setMsg("Kamu lebih fokus terhadap pekerjaan kamu ");
+      }
+      if (percentRange <= 10) {
+        setJudul("telalu fokus sampai lupa makan");
+        setMsg("Kuliah membuatmu lupa makan dah jatuh sakit ");
+      }
+      if (percentRange2 <= 10) {
+        setJudul("telalu fokus sampai lupa tidur");
+        setMsg("Kuliah membuatmu lupa tidur dah jatuh sakit ");
+      }
+      if (percentRange3 <= 10 && percentRange4 >= 80) {
+        setJudul("telalu fokus kuliah sampai stress");
+        setMsg("Kuliah penting namun hiburan harus terpenuhi ");
+      }
+      if (percentRange4 <= 10) {
+        setJudul("tidak fokus dengan kuliahhmu");
+        setMsg(
+          "Kuliah pentingpenting untuk masa depan. Mungkin waktunya ganti program studi yang cocok."
+        );
+      }
+      setShow(true);
+    }
+  }, [state.day]);
+
+  useEffect(() => {
+    setProgress(50);
+    setProgress2(50);
+    setProgress3(50);
+    setProgress4(0);
+  }, []);
 
   function loc1(pass) {
     setLocation("Kampus");
@@ -201,43 +319,63 @@ export const ProgressBarContainer = (child) => {
 
   return (
     <div>
+      <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Kamu {judul}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{msg}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary">Understood</Button>
+        </Modal.Footer>
+      </Modal>
       <h2>{location}</h2>
+      <h4>Rp.{count}</h4>
       <div className="container">
         <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
           <View style={styles.progressBarContainer}>
-            <span>Makan</span>
+            <img src={eat} alt="eat" className="photo" />
             <ProgressBar percentRange={percentRange} />
           </View>
           <View style={styles.progressBarContainer}>
-            <span>Tidur</span>
+            <img src={sleep} alt="sleep" className="photo" />
             <ProgressBar2 percentRange2={percentRange2} />
           </View>
           <View style={styles.progressBarContainer}>
-            <span>Main</span>
+            <img src={play} alt="play" className="photo" />
             <ProgressBar3 percentRange3={percentRange3} />
           </View>
           <View style={styles.progressBarContainer}>
-            <span>Belajar</span>
+            <img src={study} alt="study" className="photo" />
             <ProgressBar4 percentRange4={percentRange4} />
           </View>
         </View>
-        <MDBCard className="toggle-buttons">
-          <MDBCardBody>
-            <button
+        <div className="toggle-buttons">
+          <div>
+            <Button
+              variant="primary"
               disabled={buttonStatus}
               onClick={() => {
                 if (count >= 5000) {
-                  setProgress(percentRange <= 100 ? percentRange + 20 : 100);
+                  setProgress(percentRange <= 100 ? percentRange + 10 : 100);
                   if (percentRange <= 0) {
-                    setProgress(20);
+                    setProgress(0);
                   }
                   setCount(count - 5000);
                 }
               }}
             >
               Makan
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="primary"
               disabled={buttonStatus2}
               onClick={() => {
                 setProgress2(percentRange2 <= 100 ? percentRange2 + 20 : 100);
@@ -247,9 +385,10 @@ export const ProgressBarContainer = (child) => {
               }}
             >
               Tidur
-            </button>
+            </Button>
 
-            <button
+            <Button
+              variant="primary"
               disabled={buttonStatus3}
               onClick={() => {
                 setProgress3(percentRange3 <= 100 ? percentRange3 + 20 : 100);
@@ -259,8 +398,9 @@ export const ProgressBarContainer = (child) => {
               }}
             >
               Main
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="primary"
               disabled={buttonStatus4}
               onClick={() => {
                 setProgress4(percentRange4 <= 100 ? percentRange4 + 20 : 100);
@@ -270,39 +410,45 @@ export const ProgressBarContainer = (child) => {
               }}
             >
               Belajar
-            </button>
-            <button onClick={Increase}>Kerja</button>
-          </MDBCardBody>
-        </MDBCard>
+            </Button>
+            <Button variant="primary" onClick={Increase}>
+              Kerja
+            </Button>
+          </div>
+        </div>
+        <h4>Location</h4>
 
-        <MDBCard className="toggle-buttons">
-          <MDBCardBody>
-            <button
+        <div className="toggle-buttons">
+          <div>
+            <Button
+              variant="primary"
               onClick={() => {
                 Kampus();
                 loc1();
               }}
             >
               Kampus
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="primary"
               onClick={() => {
                 cafe();
                 setLocation("Cafe");
               }}
             >
               Cafe
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="primary"
               onClick={() => {
                 rumah();
                 setLocation("Home");
               }}
             >
               Rumah
-            </button>
-          </MDBCardBody>
-        </MDBCard>
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
