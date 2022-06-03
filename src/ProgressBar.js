@@ -1,5 +1,33 @@
 import React, { useState, useEffect } from "react";
 import "./progress-bar.css";
+import {
+  MDBCard,
+  MDBCardBody,
+  MDBCardFooter,
+  MDBCardHeader,
+  MDBCardImage,
+  MDBCardOverlay,
+  MDBCardSubTitle,
+  MDBCardTitle,
+  MDBCardText,
+  MDBCardGroup,
+  MDBCardLink
+} from "mdb-react-ui-kit";
+import {
+  AppRegistry,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableHighlight,
+  ScrollView,
+  Alert,
+  TextInput,
+  KeyboardAvoidingView,
+  TouchableOpacity,
+  Button,
+  FlatList
+} from "react-native";
 
 let progressInterval = null;
 
@@ -51,15 +79,34 @@ const ProgressBar4 = (c) => {
   );
 };
 
-export const ProgressBarContainer = () => {
-  let [percentRange, setProgress, progress] = useState(0);
-  let [percentRange2, setProgress2, progress2] = useState(0);
-  let [percentRange3, setProgress3, progress3] = useState(0);
+export const ProgressBarContainer = (child) => {
+  let [percentRange, setProgress, progress] = useState(70);
+  let [percentRange2, setProgress2, progress2] = useState(100);
+  let [percentRange3, setProgress3, progress3] = useState(50);
   let [percentRange4, setProgress4, progress4] = useState(0);
   const [buttonStatus, setButtonStatus] = React.useState(false);
   const [buttonStatus2, setButtonStatus2] = React.useState(false);
   const [buttonStatus3, setButtonStatus3] = React.useState(false);
   const [buttonStatus4, setButtonStatus4] = React.useState(false);
+  const [count, setCount] = useState(0);
+  const [location, setLocation] = useState("test");
+
+  function loc1(pass) {
+    setLocation("Kampus");
+  }
+
+  function loc2(pass) {
+    setLocation("cafe");
+  }
+
+  function loc3(pass) {
+    setLocation("Home");
+  }
+
+  const Increase = () => {
+    console.log("clicked");
+    setCount(count + 1000);
+  };
 
   const Kampus = () => {
     if (buttonStatus === true || buttonStatus === false) {
@@ -143,85 +190,119 @@ export const ProgressBarContainer = () => {
     }
   }, [progress4]);
 
-  return (
-    <div className="container">
-      {percentRange}%
-      <ProgressBar percentRange={percentRange} />
-      {percentRange2}%
-      <ProgressBar2 percentRange2={percentRange2} />
-      {percentRange3}%
-      <ProgressBar3 percentRange3={percentRange3} />
-      {percentRange4}%
-      <ProgressBar4 percentRange4={percentRange4} />
-      <div className="toggle-buttons">
-        <button
-          disabled={buttonStatus}
-          onClick={() => {
-            setProgress(percentRange <= 100 ? percentRange + 20 : 100);
-            if (percentRange <= 0) {
-              setProgress(20);
-            }
-          }}
-        >
-          Makan
-        </button>
-        <button
-          disabled={buttonStatus2}
-          onClick={() => {
-            setProgress2(percentRange2 <= 100 ? percentRange2 + 20 : 100);
-            if (percentRange2 <= 0) {
-              setProgress2(20);
-            }
-          }}
-        >
-          Tidur
-        </button>
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: "#fff",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  });
 
-        <button
-          disabled={buttonStatus3}
-          onClick={() => {
-            setProgress3(percentRange3 <= 100 ? percentRange3 + 20 : 100);
-            if (percentRange3 <= 0) {
-              setProgress3(20);
-            }
-          }}
-        >
-          Main
-        </button>
-        <button
-          disabled={buttonStatus4}
-          onClick={() => {
-            setProgress4(percentRange4 <= 100 ? percentRange4 + 20 : 100);
-            if (percentRange4 <= 0) {
-              setProgress4(20);
-            }
-          }}
-        >
-          Belajar
-        </button>
-      </div>
-      <div class="-buttons2">
-        <button
-          onClick={() => {
-            Kampus();
-          }}
-        >
-          Kampus
-        </button>
-        <button
-          onClick={() => {
-            cafe();
-          }}
-        >
-          Cafe
-        </button>
-        <button
-          onClick={() => {
-            rumah();
-          }}
-        >
-          Rumah
-        </button>
+  return (
+    <div>
+      <h2>{location}</h2>
+      <div className="container">
+        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+          <View style={styles.progressBarContainer}>
+            <span>Makan</span>
+            <ProgressBar percentRange={percentRange} />
+          </View>
+          <View style={styles.progressBarContainer}>
+            <span>Tidur</span>
+            <ProgressBar2 percentRange2={percentRange2} />
+          </View>
+          <View style={styles.progressBarContainer}>
+            <span>Main</span>
+            <ProgressBar3 percentRange3={percentRange3} />
+          </View>
+          <View style={styles.progressBarContainer}>
+            <span>Belajar</span>
+            <ProgressBar4 percentRange4={percentRange4} />
+          </View>
+        </View>
+        <MDBCard className="toggle-buttons">
+          <MDBCardBody>
+            <button
+              disabled={buttonStatus}
+              onClick={() => {
+                if (count >= 5000) {
+                  setProgress(percentRange <= 100 ? percentRange + 20 : 100);
+                  if (percentRange <= 0) {
+                    setProgress(20);
+                  }
+                  setCount(count - 5000);
+                }
+              }}
+            >
+              Makan
+            </button>
+            <button
+              disabled={buttonStatus2}
+              onClick={() => {
+                setProgress2(percentRange2 <= 100 ? percentRange2 + 20 : 100);
+                if (percentRange2 <= 0) {
+                  setProgress2(20);
+                }
+              }}
+            >
+              Tidur
+            </button>
+
+            <button
+              disabled={buttonStatus3}
+              onClick={() => {
+                setProgress3(percentRange3 <= 100 ? percentRange3 + 20 : 100);
+                if (percentRange3 <= 0) {
+                  setProgress3(20);
+                }
+              }}
+            >
+              Main
+            </button>
+            <button
+              disabled={buttonStatus4}
+              onClick={() => {
+                setProgress4(percentRange4 <= 100 ? percentRange4 + 20 : 100);
+                if (percentRange4 <= 0) {
+                  setProgress4(20);
+                }
+              }}
+            >
+              Belajar
+            </button>
+            <button onClick={Increase}>Kerja</button>
+          </MDBCardBody>
+        </MDBCard>
+
+        <MDBCard className="toggle-buttons">
+          <MDBCardBody>
+            <button
+              onClick={() => {
+                Kampus();
+                loc1();
+              }}
+            >
+              Kampus
+            </button>
+            <button
+              onClick={() => {
+                cafe();
+                setLocation("Cafe");
+              }}
+            >
+              Cafe
+            </button>
+            <button
+              onClick={() => {
+                rumah();
+                setLocation("Home");
+              }}
+            >
+              Rumah
+            </button>
+          </MDBCardBody>
+        </MDBCard>
       </div>
     </div>
   );

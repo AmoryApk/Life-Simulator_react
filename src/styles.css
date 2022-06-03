@@ -147,25 +147,31 @@ main {
   padding: 25px;
 }
 
-/* .location-box .location {
+.location-box .location {
   color: white;
   font-size: 32px;
   font-weight: 500;
   text-align: center;
   text-shadow: 3px 3px rgba(50, 50, 70, 0.5);
-} */
+}
 
-/* .location-box .date {
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.date {
   color: white;
   font-size: 20px;
   font-weight: 300;
   font-style: italic;
-  text-align: right;
+  text-align: left;
   text-shadow: 2px 2px rgba(50, 50, 70, 0.5);
   margin-bottom: 10px;
-} */
+}
 
-.location-box .time {
+.time {
   color: white;
   font-size: 20px;
   font-weight: 300;

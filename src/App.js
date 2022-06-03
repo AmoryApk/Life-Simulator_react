@@ -288,7 +288,6 @@ function App() {
             value={formState.values.studyProgram}
             onChange={handleInputChange}
             multiple
-            required
           >
             <option value="">Choose your study program</option>
             <option value="Informatics">Informatics</option>
