@@ -172,12 +172,13 @@ export const ProgressBarContainer = (child) => {
   );
 
   useEffect(() => {
-    if (state.day === "Saturday" && state.hour === 23) {
-      if (count >= 1000000) {
+    if (state.hour === 5) {
+      if (count >= 150000) {
         setJudul("Mending langsung kerja");
         setMsg("Kamu lebih fokus terhadap pekerjaan kamu ");
+        setShow(true);
       }
-      if (percentRange <= 10) {
+      if (percentRange <= 10 && percentRange4 >= 90) {
         setJudul("telalu fokus sampai lupa makan");
         setMsg("Kuliah membuatmu lupa makan dah jatuh sakit ");
       }
@@ -192,7 +193,7 @@ export const ProgressBarContainer = (child) => {
       if (percentRange4 <= 10) {
         setJudul("tidak fokus dengan kuliahhmu");
         setMsg(
-          "Kuliah pentingpenting untuk masa depan. Mungkin waktunya ganti program studi yang cocok."
+          "Kuliah penting untuk masa depan. Mungkin waktunya ganti program studi yang cocok."
         );
       }
       setShow(true);
@@ -276,6 +277,62 @@ export const ProgressBarContainer = (child) => {
       setProgress4((prev) => prev - 0.025);
     }, 100);
   }, []);
+
+  function onEat() {
+    if (state.eat >= 100) {
+      Alert.alert("Error", "You are already at the maximum eat value");
+    } else {
+      setState({
+        ...state,
+        eat: state.eat + 7,
+        sleep: state.sleep - 5,
+        play: state.play - 4,
+        study: state.study - 3
+      });
+    }
+  }
+
+  function onSleep() {
+    if (state.sleep >= 100) {
+      Alert.alert("Error", "You are already at the maximum sleep value");
+    } else {
+      setState({
+        ...state,
+        eat: state.eat - 8,
+        sleep: state.sleep + 10,
+        play: state.play - 4,
+        study: state.study - 3
+      });
+    }
+  }
+
+  function onPlay() {
+    if (state.play >= 100) {
+      Alert.alert("Error", "You are already at the maximum play value");
+    } else {
+      setState({
+        ...state,
+        eat: state.eat - 4,
+        sleep: state.sleep - 4,
+        play: state.play + 6,
+        study: state.study - 7
+      });
+    }
+  }
+
+  function onStudy() {
+    if (state.study >= 100) {
+      Alert.alert("Error", "You are already at the maximum study value");
+    } else {
+      setState({
+        ...state,
+        eat: state.eat - 6,
+        sleep: state.sleep - 4,
+        play: state.play - 7,
+        study: state.study + 9
+      });
+    }
+  }
 
   useEffect(() => {
     if (progress <= 100) {
@@ -362,8 +419,11 @@ export const ProgressBarContainer = (child) => {
               onClick={() => {
                 if (count >= 5000) {
                   setProgress(percentRange <= 100 ? percentRange + 10 : 100);
+                  setProgress2(percentRange2 <= 100 ? percentRange2 - 5 : 100);
+                  setProgress3(percentRange3 <= 100 ? percentRange3 - 3 : 100);
+                  setProgress4(percentRange4 <= 100 ? percentRange4 - 4 : 100);
                   if (percentRange <= 0) {
-                    setProgress(0);
+                    setProgress(20);
                   }
                   setCount(count - 5000);
                 }
@@ -375,7 +435,10 @@ export const ProgressBarContainer = (child) => {
               variant="primary"
               disabled={buttonStatus2}
               onClick={() => {
-                setProgress2(percentRange2 <= 100 ? percentRange2 + 20 : 100);
+                setProgress(percentRange <= 100 ? percentRange - 10 : 100);
+                setProgress2(percentRange2 <= 100 ? percentRange2 + 15 : 100);
+                setProgress3(percentRange3 <= 100 ? percentRange3 - 5 : 100);
+                setProgress4(percentRange4 <= 100 ? percentRange4 - 6 : 100);
                 if (percentRange2 <= 0) {
                   setProgress2(20);
                 }
@@ -388,7 +451,10 @@ export const ProgressBarContainer = (child) => {
               variant="primary"
               disabled={buttonStatus3}
               onClick={() => {
-                setProgress3(percentRange3 <= 100 ? percentRange3 + 20 : 100);
+                setProgress(percentRange <= 100 ? percentRange - 5 : 100);
+                setProgress2(percentRange2 <= 100 ? percentRange2 - 7 : 100);
+                setProgress3(percentRange3 <= 100 ? percentRange3 + 8 : 100);
+                setProgress4(percentRange4 <= 100 ? percentRange4 - 5 : 100);
                 if (percentRange3 <= 0) {
                   setProgress3(20);
                 }
@@ -400,7 +466,10 @@ export const ProgressBarContainer = (child) => {
               variant="primary"
               disabled={buttonStatus4}
               onClick={() => {
-                setProgress4(percentRange4 <= 100 ? percentRange4 + 20 : 100);
+                setProgress(percentRange <= 100 ? percentRange - 6 : 100);
+                setProgress2(percentRange2 <= 100 ? percentRange2 - 5 : 100);
+                setProgress3(percentRange3 <= 100 ? percentRange3 - 4 : 100);
+                setProgress4(percentRange4 <= 100 ? percentRange4 + 7 : 100);
                 if (percentRange4 <= 0) {
                   setProgress4(20);
                 }
