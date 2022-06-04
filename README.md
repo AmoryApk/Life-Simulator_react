@@ -23,4 +23,8 @@ Sabilillah Amory Reyhan Rusjdi
 IF231-F
 
 Created with CodeSandbox
+
 https://github.com/AmoryApk/Life-Simulator_react
+
+Penjelasan Gameplay
+https://drive.google.com/file/d/1QsZgJWcAD1PICrNQR-hlXCZMbxYWdlf4/view
