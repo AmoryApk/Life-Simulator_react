@@ -303,16 +303,17 @@
 
 // export default Home;
 
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState, Component } from "react";
 import { ScrollView } from "react-native";
 import { Sunny, Cloudy, Rain, Snow } from "weather-styled-icon";
 import axios from "axios";
 import MobileViewLayout from "react-mobile-layout";
-import { Link } from "react-router-dom";
+import { Link, Router, Route } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 import { ProgressBarContainer } from "./ProgressBar";
 import "./styles.css";
+import News from "./component/News";
 
 const api = {
   key: "1ac74a3d55fa77c410c13c10ed1a4649",
@@ -557,6 +558,11 @@ function Home() {
                         <Link to="/home">
                           <FontAwesomeIcon icon={faAngleRight} />
                         </Link>
+                        <li className="nav-item">
+                          <Link className="nav-link text-white" to="/news">
+                            News
+                          </Link>
+                        </li>
                       </h5>
                       <div className="card-text">
                         <div className="row">

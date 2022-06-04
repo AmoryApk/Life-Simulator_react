@@ -155,9 +155,6 @@ export const ProgressBarContainer = (child) => {
   useEffect(() => {
     if (state.minute === 59) {
       dispatch({ type: "hour" });
-      setShow(true);
-      setJudul("telalu fokus kuliah sampai stress");
-      setMsg("Kuliah penting namun hiburan harus terpenuhi ");
     }
   }, [state.minute]);
 
@@ -166,7 +163,7 @@ export const ProgressBarContainer = (child) => {
       if (state.hour === 23) {
         dispatch({ type: "day" });
       }
-      if (state.day === "Saturday") {
+      if (state.day === "Saturday" && state.hour === 23) {
         setShow(true);
       }
     },
@@ -175,7 +172,7 @@ export const ProgressBarContainer = (child) => {
   );
 
   useEffect(() => {
-    if (state.day === "Saturday") {
+    if (state.day === "Saturday" && state.hour === 23) {
       if (count >= 1000000) {
         setJudul("Mending langsung kerja");
         setMsg("Kamu lebih fokus terhadap pekerjaan kamu ");
@@ -200,7 +197,7 @@ export const ProgressBarContainer = (child) => {
       }
       setShow(true);
     }
-  }, [state.day]);
+  }, []);
 
   useEffect(() => {
     setProgress(50);
