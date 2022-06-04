@@ -23,3 +23,4 @@ Sabilillah Amory Reyhan Rusjdi
 IF231-F
 
 Created with CodeSandbox
+https://github.com/AmoryApk/Life-Simulator_react
